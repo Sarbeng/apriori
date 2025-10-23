@@ -82,7 +82,20 @@ with tab1:
             st.markdown("*Identify customer segments and optimize marketing efforts*")
             if insights['targeted_marketing']:
                 for insight in insights['targeted_marketing']:
-                    campaign_colorimport streamlit as st
+                    campaign_color = "#28a745" if insight['campaign_type'] == 'Mass Campaign' else "#17a2b8" if insight['campaign_type'] == 'Targeted Campaign' else "#6f42c1"
+                    st.markdown(f"""
+                    <div class="insight-box">
+                        <strong>🎯 Target Segment:</strong> {insight['segment']}<br>
+                        <strong>Promote:</strong> {insight['target_product']}<br>
+                        <strong>Segment Size:</strong> {insight['segment_size']}<br>
+                        <strong>Campaign Type:</strong> 
+                        <span style="color: {campaign_color}; font-weight: bold;">{insight['campaign_type']}</span><br>
+                        <strong>Success Probability:</strong> {insight['success_probability']}<br>
+                        <strong>ROI Multiplier:</strong> {insight['roi_multiplier']}
+                    </div>
+                    """, unsafe_allow_html=True)
+            else:
+                st.info("📢 Marketing segment recommendations will be generated from purchase data.")import streamlit as st
 import pandas as pd
 import numpy as np
 from mlxtend.frequent_patterns import apriori, association_rules
@@ -810,16 +823,7 @@ def main():
         
         insights = analyzer.generate_business_insights(analyzer.rules, analyzer.frequent_itemsets)
         
-        # Create tabs for different business strategies
-        tab1, tab2, tab3, tab4, tab5 = st.tabs([
-            "🎯 Cross-Selling", 
-            "📍 Product Placement", 
-            "🎁 Promotional Bundles", 
-            "📦 Inventory Management", 
-            "📢 Targeted Marketing"
-        ])
-        
-        with tab1:
+
             st.markdown("### Cross-Selling Opportunities")
             if insights['cross_selling']:
                 for i, insight in enumerate(insights['cross_selling']):
